@@ -105,6 +105,19 @@ customCompressor.compressPDF('input.pdf', 'output.pdf')
     console.log(`Compression successful: ${result.percentReduction} reduction`);
   });
 
+// Using custom tempDir (useful for serverless environments like AWS Lambda)
+const serverlessCompressor = new PDFCompressor({
+  optimizeImages: true,
+  imageQuality: 60,
+  compressionLevel: 5,
+  tempDir: '/tmp/pdf-compression'  // Writable directory
+});
+
+serverlessCompressor.compressPDF('input.pdf', 'output.pdf')
+  .then(result => {
+    console.log(`Compressed in serverless environment: ${result.percentReduction} reduction`);
+  });
+
 // Update options after initialization
 compressor.setOptions({
   imageQuality: 50,
@@ -135,6 +148,7 @@ const compressor = new PDFCompressor(options);
 - `removeMetadata` (boolean): Whether to remove metadata (default: true)
 - `compressionLevel` (number): PDF compression level from 1-5 (default: 3)
 - `grayscale` (boolean): Convert to grayscale (default: false)
+- `tempDir` (string): Custom temporary directory path for processing (default: process.cwd()/temp)
 
 #### Methods
 

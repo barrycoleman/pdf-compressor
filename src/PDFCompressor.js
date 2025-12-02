@@ -18,6 +18,7 @@ class PDFCompressor {
      * @param {boolean} options.removeMetadata - Whether to remove metadata (default: true)
      * @param {number} options.compressionLevel - PDF compression level (1-5, default: 3)
      * @param {boolean} options.grayscale - Convert to grayscale (default: false)
+     * @param {string} options.tempDir - Custom temporary directory path (default: process.cwd()/temp)
      */
     constructor(options = {}) {
         this.options = {
@@ -26,6 +27,7 @@ class PDFCompressor {
             removeMetadata: options.removeMetadata !== undefined ? options.removeMetadata : true,
             compressionLevel: options.compressionLevel || 3,
             grayscale: options.grayscale !== undefined ? options.grayscale : false,
+            tempDir: options.tempDir || path.join(process.cwd(), 'temp'),
         };
 
         // Initialize optimization strategies
@@ -53,7 +55,7 @@ class PDFCompressor {
             }
 
             // Create temp directory for processing
-            const tempDir = path.join(process.cwd(), 'temp', uuidv4());
+            const tempDir = path.join(currentOptions.tempDir, uuidv4());
             await fs.ensureDir(tempDir);
 
             // Get initial file size
